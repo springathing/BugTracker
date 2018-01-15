@@ -1,0 +1,99 @@
+﻿@model mblyakher_bugtracker.Models.CodeFirst.Project
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Project Details</h2>
+    </div>
+</header>
+<div class="container-fluid">
+    <div class="row bg-white has-shadow" style="margin-top:25px; margin-bottom:25px;">
+        <div class="col-lg-12" style="padding:10px;">
+            <div>
+                <h4>Project</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Created)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Created)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Updated)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Updated)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Title)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Description)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.AuthorId)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.AuthorId)
+                    </dd>
+                    @*<dt>
+                        @Html.DisplayFor(model => model.AssignedToId)
+                    </dt>
+                    <dd>
+                        @Html.DropDownList(model => model.AssignedToId.ToList())
+                    </dd>*@
+
+                </dl>
+            </div>
+            <p>
+                @if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                {
+                    <div>
+                        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+                        @Html.ActionLink("Assign Users", "ProjectUser", "Projects", new { id = Model.Id }, null) | @*overloads need to be either 3 or 5*@
+                    </div>
+                }
+                @Html.ActionLink("Back to List", "Index")
+            </p>
+            <hr />
+            <h5>Tickets</h5>
+            <hr />
+            @foreach (var ticket in Model.Tickets)
+            {
+                if (ticket != null)
+                {
+                    <div><strong>Title: </strong>@Html.DisplayFor(modelticket => ticket.Title)</div>
+                    <div><strong>Description: </strong>@Html.DisplayFor(modelticket => ticket.Description)</div>
+                    <div><strong>Created On: </strong>@Html.DisplayFor(modelticket => ticket.Created)</div>
+                    if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.IsInRole("Developer"))
+                    {
+                        <div style="font-size:0.75em;">
+                            @Html.ActionLink("Edit", "Edit", "Tickets", new { id = ticket.Id }, null) <span> | </span>
+                            @Html.ActionLink("Delete", "Delete", "Tickets", new { id = ticket.Id }, null)
+                        </div>
+                    }
+                    <hr />
+                }
+            }            
+        </div>
+    </div>
+</div>

@@ -1,0 +1,67 @@
+﻿@model IEnumerable<mblyakher_bugtracker.Models.Helpers.AdminUserViewModels>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Admin Index of Users & Roles</h2>
+    </div>
+</header>
+<div class="container-fluid">
+    <div class="row bg-white has-shadow" style="margin-top:25px; margin-bottom:25px;">
+        <div class="col-lg-12" style="padding:10px;">
+            <table class="table">
+                <tr>
+                    <th style="border-top:none;">
+                        Name
+                    </th>
+                    <th style="border-top:none;">
+                        Email
+                    </th>
+                    <th style="border-top:none;">
+                        Roles
+                    </th>
+                    <th style="border-top:none;"></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.User.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.User.Email)
+                        </td>
+                        <td>
+                            @foreach (var role in item.SelectedRoles)
+                            {
+                                <p>@role</p>
+                            }
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit Roles", "EditUserRoles", new { id = item.User.Id })
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</div>
+
+@*<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom"></h2>
+    </div>
+</header>
+<div class="container-fluid">
+    <div class="row bg-white has-shadow" style="margin-top:25px; margin-bottom:25px;">
+        <div class="col-lg-12" style="padding:10px;">
+
+        </div>
+    </div>
+</div>*@

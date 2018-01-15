@@ -1,0 +1,304 @@
+﻿@model mblyakher_bugtracker.Models.CodeFirst.Ticket
+@using Microsoft.AspNet.Identity;
+@{
+    ViewBag.Title = "Details";
+}
+
+<head>
+    <style>
+        /* Style the buttons that are used to open and close the accordion panel */
+        button.accordion {
+            background-color: #eee;
+            color: #444;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            text-align: left;
+            border: none;
+            outline: none;
+            transition: 0.4s;
+        }
+
+            /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+            button.accordion.active, button.accordion:hover {
+                background-color: #ddd;
+            }
+
+        /* Style the accordion panel. Note: hidden by default */
+
+        div.panel {
+            padding: 0 18px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+        }
+
+        button.accordion:after {
+            content: '\02795'; /* Unicode character for "plus" sign (+) */
+            font-size: 13px;
+            color: #777;
+            float: right;
+            margin-left: 5px;
+        }
+
+        button.accordion.active:after {
+            content: "\2796"; /* Unicode character for "minus" sign (-) */
+        }
+    </style>
+</head>
+
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Ticket Details</h2>
+    </div>
+</header>
+@if (User.Identity.GetUserId() == Model.AssignToUserId)
+{
+    <div class="container-fluid">
+        <div class="row bg-white has-shadow" style="margin-top:25px; margin-bottom:25px;">
+            <div class="col-lg-12" style="padding:10px;">
+                <div>
+                    <h5>Notifications:</h5>
+                </div> @* easy route for filtering the most recent notifications *@
+                <button class="accordion">Notifications</button>
+                <div class="panel">
+
+                    @foreach (var notification in Model.Notifications.Take(5).OrderByDescending(c => c.Created))
+                {
+                    if (notification != null)
+                    {
+                            <div>
+                                @Html.DisplayFor(modelNotify => notification.Message) <strong>---- ON ----</strong>
+                                @Html.DisplayFor(modelNotify => notification.Created)
+                            </div>
+                        }
+                    }
+                    </div>
+                
+                </div>
+        </div>
+    </div>
+}
+<div class="container-fluid">
+    <div class="row bg-white has-shadow" style="margin-top:25px; margin-bottom:25px;">
+        <div class="col-lg-12" style="padding:10px;">
+            <div>
+                <h4>Ticket</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        Assigned Developer
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.AssignToUser.FirstName)
+                    </dd>
+
+                    <dt>
+                        Owner of Ticket
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.OwnerUser.FirstName)
+                    </dd>
+
+                    <dt>
+                        Project
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Project.Title)
+                    </dd>
+
+                    <dt>
+                        Ticket Priority
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.TicketPriority.Name)
+                    </dd>
+
+                    <dt>
+                        Ticket Status
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.TicketStatus.Name)
+                    </dd>
+
+                    <dt>
+                        Ticket Type
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.TicketType.Name)
+                    </dd>
+
+                    <dt>
+                        Title
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Title)
+                    </dd>
+
+                    <dt>
+                        Description
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Description)
+                    </dd>
+
+                    <dt>
+                        Created
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Created)
+                    </dd>
+
+                    <dt>
+                        Updated
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Updated)
+                    </dd>
+
+                </dl>
+            </div>
+            <p>
+                @if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.Identity.GetUserId() == Model.AssignToUserId)
+                {
+                    <div style="font-size:1em">
+                        @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+                    </div>
+                }
+                @Html.ActionLink("Back to List", "Index")
+            </p>
+            <hr />
+            <div>
+                @if (User.Identity.GetUserId() == Model.AssignToUserId || User.Identity.GetUserId() == Model.OwnerUserId || User.IsInRole("Admin"))
+                {
+                    <div>
+                        <h3>Ticket Comments</h3>
+                        @using (Html.BeginForm("CommentCreate", "Tickets", FormMethod.Post, new { enctype = "Multipart/form-data" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="number" name="TicketId" value="@Model.Id" hidden />
+                            <div>
+                                <textarea type="text" name="Body" rows="4" class="form-control" required placeholder="Add a comment..."></textarea>
+                            </div>
+                            <div>
+                                <input class="btn btn-default" type="submit" value="Share" />
+                            </div>
+                            <br />
+                        }
+                    </div>
+                }
+                else
+                {
+                    @Html.ActionLink("Login to leave a comment.", "Login", "Account")
+                }
+
+                @foreach (var comment in Model.Comments)
+                {
+                    if (comment != null)
+                    {
+                        <div>
+                            <div>@Html.DisplayFor(modelcomment => comment.Author.FullName)</div>
+                            <div>@Html.DisplayFor(modelcomment => comment.Body)</div>
+                            <div>@comment.Created.ToString("d")</div>
+
+                            @if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.Identity.GetUserId() == comment.AuthorId || User.Identity.GetUserId() == Model.AssignToUserId) // author id and user id is going to be the same number
+                            {
+                                <div>
+                                    @Html.ActionLink("Edit", "Edit", "TicketComments", new { id = comment.Id }, null) <span> | </span>
+                                    @Html.ActionLink("Delete", "Delete", "TicketComments", new { id = comment.Id }, null)
+                                </div>
+
+                            }
+                        </div>
+                        <br />
+                    }
+                }
+            </div>
+            <hr />
+            <div>
+                @if (User.Identity.GetUserId() == Model.AssignToUserId || User.Identity.GetUserId() == Model.OwnerUserId || User.IsInRole("Admin"))
+                {
+                    <div>
+                        <h3>Add Attachments</h3>
+                        @*enctype multipart is used for attachment because we're passing multiple forms of data with the request*@
+                        @using (Html.BeginForm("CreateAttachment", "Tickets", FormMethod.Post, new { enctype = "Multipart/form-data" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="number" name="TicketId" value="@Model.Id" hidden />
+                            
+                                <div>
+                                    <textarea class="textarea" placeholder="Description..." name="Description" style="width:100%; height:125px; font-size:14px; line-height:18px; border:1px solid #dddddd; padding:10px;"></textarea>
+                                </div>
+                           
+                            <label class="control-label">Upload File</label>
+                            <div>
+                                <input name="image" type="file" class="form-control" id="fileupload" />
+                            </div>
+                            <div>
+                                
+                                    <input class="btn btn-default" type="submit" value="Share" />
+                                
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    @Html.ActionLink("Login to leave an attachment.", "Login", "Account")
+                }
+
+                @foreach (var attachment in Model.Attachments)
+                {
+                    if (attachment != null)
+                    {
+                        <div>
+                            <div>@Html.DisplayFor(modelattachment => attachment.Author.FullName)</div>
+                            <div>@Html.DisplayFor(modelattachment => attachment.Description)</div>
+                            <div>@attachment.Created.ToString("d")</div>
+                            <img src="@attachment.FileUrl" class="img-responsive" />
+
+                            @if (User.IsInRole("Admin") || User.IsInRole("Project Manager") || User.Identity.GetUserId() == attachment.AuthorId || User.Identity.GetUserId() == Model.AssignToUserId) // author id and user id is going to be the same number
+                            {
+                                <div>
+                                    @Html.ActionLink("Delete", "Delete", "TicketAttachments", new { id = attachment.Id }, null)
+                                </div>
+
+                            }
+                        </div>
+                        <br />
+                    }
+                }
+            </div>
+    </div>
+</div>
+</div>
+
+<!--Accordian Menu Script Begins-->
+<script>
+            var acc = document.getElementsByClassName("accordion");
+            var i;
+
+            for (i = 0; i < acc.length; i++) {
+                acc[i].onclick = function () {
+                    this.classList.toggle("active");
+                    var panel = this.nextElementSibling;
+                    if (panel.style.maxHeight) {
+                        panel.style.maxHeight = null;
+                    } else {
+                        panel.style.maxHeight = panel.scrollHeight + "px";
+                    }
+                }
+            }
+</script>
+<!--Accordian Menu Script Ends-->

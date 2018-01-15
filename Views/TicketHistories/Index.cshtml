@@ -1,0 +1,75 @@
+﻿@model IEnumerable<mblyakher_bugtracker.Models.CodeFirst.TicketHistory>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<header class="page-header">
+        <div class="container-fluid">
+            <h2 class="no-margin-bottom">History of Ticket Changes</h2>
+        </div>
+    </header>
+    <div class="container-fluid">
+        <div class="row bg-white has-shadow" style="margin-top:25px; margin-bottom:25px;">
+            <div class="col-lg-12" style="padding:10px;">
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Author.FirstName)
+                        </th>
+                        @*<th>
+                            @Html.DisplayNameFor(model => model.Ticket.Title)
+                        </th>*@
+                        <th>
+                            @Html.DisplayNameFor(model => model.Property)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.OldValue)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NewValue)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Created)
+                        </th>
+                        @*<th></th>*@
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Author.FirstName)
+                            </td>
+                            @*<td>
+                                @Html.DisplayFor(modelItem => item.Ticket.Title)
+                            </td>*@
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Property)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OldValue)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NewValue)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Created)
+                            </td>
+                            @*<td>
+                        @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                        @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+                    </td>*@
+                        </tr>
+                    }
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+

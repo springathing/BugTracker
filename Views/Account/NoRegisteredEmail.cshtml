@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "NoRegisteredEmail";
+}
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">No Registered Email</h2>
+    </div>
+</header>
+<div class="container-fluid">
+    <div class="row bg-white has-shadow" style="margin-top:25px; margin-bottom:25px;">
+        <div class="col-lg-12" style="padding:10px;">
+            <div>
+                <p>
+                    Unfortunately we weren't able to find an account associated with that email address. Press "Register Now" to be redirected to our registration page, "Back" to try again with a different email address or "Home" to return to our home page.
+                </p>
+            </div>
+
+            @Html.ActionLink("Register", "Register") |
+            @Html.ActionLink("Back", "ForgotPassword") |
+            @Html.ActionLink("Home", "Index", "Home")
+        </div>
+    </div>
+</div>
+
+

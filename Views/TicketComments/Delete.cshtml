@@ -1,0 +1,74 @@
+﻿@model mblyakher_bugtracker.Models.CodeFirst.TicketComment
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Delete Comment?</h2>
+    </div>
+</header>
+<div class="container-fluid">
+    <div class="row bg-white has-shadow" style="margin-top:25px; margin-bottom:25px;">
+        <div class="col-lg-12" style="padding:10px;">
+            <div>
+                <h4>Ticket Comment</h4>
+                <hr />
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Author.FirstName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Author.FirstName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Ticket.Title)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Ticket.Title)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Body)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Body)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Created)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Created)
+                    </dd>
+
+                    @*<dt>
+                    @Html.DisplayNameFor(model => model.Updated)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Updated)
+                </dd>*@
+
+                </dl>
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-actions no-color">
+                        <input type="submit" value="Delete" class="btn btn-default" /> |
+                        @Html.ActionLink("Back to List", "Index")
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
